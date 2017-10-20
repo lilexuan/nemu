@@ -50,7 +50,7 @@ static struct {
 
 };
 //fuck
-#define NR_CMD (sizeof(cmd_table) / sizeof(cmd_table[0]))
+#define NR_CMD (sizeof(cmd_table) / sizeof(cmd_table[0])) //cmd指令的数量
 
 static int cmd_help(char *args) {
 	/* extract the first argument */
@@ -78,7 +78,7 @@ static int cmd_help(char *args) {
 void ui_mainloop() {
 	while(1) {
 		char *str = rl_gets();
-		char *str_end = str + strlen(str);
+		char *str_end = str + strlen(str); //读入字符串，用两个指针分别指向头和尾
 
 		/* extract the first token as the command */
 		char *cmd = strtok(str, " ");
