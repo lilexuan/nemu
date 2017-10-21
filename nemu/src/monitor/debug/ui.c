@@ -79,7 +79,7 @@ static int cmd_help(char *args) {
 }
 
 static int cmd_si(char *args) {
-	unsign step_num;
+	unsigned step_num;
 	if (args == NULL) {
 		cpu_exec(1);
 		return 0;
