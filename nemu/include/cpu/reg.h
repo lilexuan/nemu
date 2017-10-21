@@ -20,11 +20,12 @@ typedef struct {
 			uint32_t _32;
 			uint16_t _16;
 			uint8_t _8[2];
-		} gpr[8];
+		} gpr[8]; // 这里的总长度是4*8=32
 
 		/* Do NOT change the order of the GPRs' definitions. */
-
-		uint32_t eax, ecx, edx, ebx, esp, ebp, esi, edi;
+		struct { // 为了和上面的长度一致，所以这里应该有个结构体，使得长度为32 
+			uint32_t eax, ecx, edx, ebx, esp, ebp, esi, edi;
+		};
 	};
 	swaddr_t eip;
 
