@@ -49,7 +49,7 @@ static struct {
 	/* TODO: Add more commands */
 
 };
-//fuck
+
 #define NR_CMD (sizeof(cmd_table) / sizeof(cmd_table[0])) //cmd指令的数量
 
 static int cmd_help(char *args) {
