@@ -79,12 +79,12 @@ static int cmd_help(char *args) {
 }
 
 static int cmd_si(char *args) {
-	unsigned step_num;
+	int step_num;
 	if (args == NULL) {
 		cpu_exec(1);
 		return 0;
 	} else {
-		if (sscanf(args, "%u", &step_num) > 0) {
+		if (sscanf(args, "%d", &step_num) > 0) {
 			cpu_exec(step_num);
 		} else {
 			printf("Error, si must be followed by a number\n");
