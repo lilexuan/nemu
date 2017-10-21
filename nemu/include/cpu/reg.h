@@ -15,16 +15,18 @@ enum { R_AL, R_CL, R_DL, R_BL, R_AH, R_CH, R_DH, R_BH };
  */
 
 typedef struct {
-	struct {
-		uint32_t _32;
-		uint16_t _16;
-		uint8_t _8[2];
-	} gpr[8];
+	union {
+		union {
+			uint32_t _32;
+			uint16_t _16;
+			uint8_t _8[2];
+		} gpr[8]; // 这里的总长度是4*8=32
 
-	/* Do NOT change the order of the GPRs' definitions. */
-
-	uint32_t eax, ecx, edx, ebx, esp, ebp, esi, edi;
-
+		/* Do NOT change the order of the GPRs' definitions. */
+		struct { // 为了和上面的长度一致，所以这里应该有个结构体，使得长度为32 
+			uint32_t eax, ecx, edx, ebx, esp, ebp, esi, edi;
+		};
+	};
 	swaddr_t eip;
 
 } CPU_state;
