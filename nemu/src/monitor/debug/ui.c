@@ -38,6 +38,8 @@ static int cmd_q(char *args) {
 
 static int cmd_help(char *args);
 
+static int cmd_si(char *args);
+
 static struct {
 	char *name;
 	char *description;
@@ -46,6 +48,7 @@ static struct {
 	{ "help", "Display informations about all supported commands", cmd_help },
 	{ "c", "Continue the execution of the program", cmd_c },
 	{ "q", "Exit NEMU", cmd_q },
+	{ "si", "Step over n times and pause. If n is not given, n = 1", cmd_si},
 	/* TODO: Add more commands */
 
 };
@@ -74,6 +77,21 @@ static int cmd_help(char *args) {
 	}
 	return 0;
 }
+
+static int cmd_si(char *args) {
+	int step_num;
+	if (args == NULL) {
+		cpu_exec(1);
+		return 0;
+	} else {
+		if (sscanf(args, "%d", &step_num) > 0) {
+			cpu_exec(step_num);
+		} else {
+			printf("Error, si must be followed by a number\n");
+		}
+	}
+	return 0;
+}	
 
 void ui_mainloop() {
 	while(1) {
