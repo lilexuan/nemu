@@ -113,6 +113,19 @@ static int cmd_info(char *args) {
 			printf("ebp=%d\n", cpu.ebp);
 			printf("esi=%d\n", cpu.esi);
 			printf("edi=%d\n", cpu.edi);
+			char _16_[8][5] = {
+				"R_AX", "R_CX", "R_DX", "R_BX", "R_SP", "R_BP", "R_SI", "R_DI",
+			}
+			for (int i = R_EAX; i <= R_EDI; i++) {
+				printf("%s=%d\n", _16_[i], cpu.gpr[i]._16);	
+			}
+			char _8_[8][5] = {
+				"R_AL", "R_CL", "R_DL", "R_BL", "R_AH", "R_CH", "R_DH", "R_BH",
+			}
+			for (int i = R_EAX; i <= R_EBX; i++) {
+				printf("%s=%d\n", _8_[i], cpu.gpr[i]._8[0]);
+				printf("%s=%d\n", _8_[i + 4], cpu.grp[i]._8[1]);
+			}
 		} else if (type == 'b') {
 			printf("Sorry, this function is developing!\n");
 		}
