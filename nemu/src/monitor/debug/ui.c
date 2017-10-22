@@ -2,6 +2,7 @@
 #include "monitor/expr.h"
 #include "monitor/watchpoint.h"
 #include "nemu.h"
+#include "cpu/reg.h"
 
 #include <stdlib.h>
 #include <readline/readline.h>
@@ -40,6 +41,8 @@ static int cmd_help(char *args);
 
 static int cmd_si(char *args);
 
+static int cmd_info(char *args);
+
 static struct {
 	char *name;
 	char *description;
@@ -49,6 +52,7 @@ static struct {
 	{ "c", "Continue the execution of the program", cmd_c },
 	{ "q", "Exit NEMU", cmd_q },
 	{ "si", "Step over n times and pause. If n is not given, n = 1", cmd_si},
+	{ "info", "Info [r] print the values of all of the registers; Info [n] print the imformation of watchpoint", cmd_info},
 	/* TODO: Add more commands */
 
 };
@@ -79,12 +83,12 @@ static int cmd_help(char *args) {
 }
 
 static int cmd_si(char *args) {
-	int step_num;
+	unsigned step_num;
 	if (args == NULL) {
 		cpu_exec(1);
 		return 0;
 	} else {
-		if (sscanf(args, "%d", &step_num) > 0) {
+		if (sscanf(args, "%u", &step_num) > 0) {
 			cpu_exec(step_num);
 		} else {
 			printf("Error, si must be followed by a number\n");
@@ -92,6 +96,45 @@ static int cmd_si(char *args) {
 	}
 	return 0;
 }	
+
+static int cmd_info(char *args) {
+	char type;
+	if (args == NULL) {
+		printf("Error, [info] must be followed by [b] or [r]!\n");
+		return 0;
+	}
+	if (sscanf(args, "%c", &type) > 0) {
+		if (type == 'r') {
+			printf("eax=%d\n", cpu.eax);
+			printf("ecx=%d\n", cpu.ecx);
+			printf("edx=%d\n", cpu.edx);
+			printf("ebx=%d\n", cpu.ebx);
+			printf("esp=%d\n", cpu.esp);
+			printf("ebp=%d\n", cpu.ebp);
+			printf("esi=%d\n", cpu.esi);
+			printf("edi=%d\n", cpu.edi);
+			char _16_[8][5] = {
+				"R_AX", "R_CX", "R_DX", "R_BX", "R_SP", "R_BP", "R_SI", "R_DI",
+			};
+			int i;
+			for (i = R_EAX; i <= R_EDI; i++) {
+				printf("%s=%d\n", _16_[i], cpu.gpr[i]._16);	
+			}
+			char _8_[8][5] = {
+				"R_AL", "R_CL", "R_DL", "R_BL", "R_AH", "R_CH", "R_DH", "R_BH",
+			};
+			for (i = R_EAX; i <= R_EBX; i++) {
+				printf("%s=%d\n", _8_[i], cpu.gpr[i]._8[0]);
+				printf("%s=%d\n", _8_[i + 4], cpu.gpr[i]._8[1]);
+			}
+		} else if (type == 'b') {
+			printf("Sorry, this function is developing!\n");
+		}
+	} else {
+		printf("Error, [info] must be followed by [b] or [r]!\n");
+	}
+	return 0;
+}
 
 void ui_mainloop() {
 	while(1) {
