@@ -124,7 +124,7 @@ static int cmd_info(char *args) {
 			};
 			for (int i = R_EAX; i <= R_EBX; i++) {
 				printf("%s=%d\n", _8_[i], cpu.gpr[i]._8[0]);
-				printf("%s=%d\n", _8_[i + 4], cpu.grp[i]._8[1]);
+				printf("%s=%d\n", _8_[i + 4], cpu.gpr[i]._8[1]);
 			}
 		} else if (type == 'b') {
 			printf("Sorry, this function is developing!\n");
