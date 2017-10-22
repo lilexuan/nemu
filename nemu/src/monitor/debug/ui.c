@@ -114,7 +114,7 @@ static int cmd_info(char *args) {
 			printf("esi=%d\n", cpu.esi);
 			printf("edi=%d\n", cpu.edi);
 		} else if (type == 'b') {
-			printf("Sorry, this function is developing!\n")
+			printf("Sorry, this function is developing!\n");
 		}
 	} else {
 		printf("Error, [info] must be followed by [b] or [r]!\n");
