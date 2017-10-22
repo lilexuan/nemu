@@ -105,14 +105,14 @@ static int cmd_info(char *args) {
 	}
 	if (sscanf(args, "%c", &type) > 0) {
 		if (type == 'r') {
-			printf("eax=%d\n", CPU_state.eax);
-			printf("ecx=%d\n", CPU_state.ecx);
-			printf("edx=%d\n", CPU_state.edx);
-			printf("ebx=%d\n", CPU_state.ebx);
-			printf("esp=%d\n", CPU_state.esp);
-			printf("ebp=%d\n", CPU_state.ebp);
-			printf("esi=%d\n", CPU_state.esi);
-			printf("edi=%d\n", CPU_state.edi);
+			printf("eax=%d\n", cpu.eax);
+			printf("ecx=%d\n", cpu.ecx);
+			printf("edx=%d\n", cpu.edx);
+			printf("ebx=%d\n", cpu.ebx);
+			printf("esp=%d\n", cpu.esp);
+			printf("ebp=%d\n", cpu.ebp);
+			printf("esi=%d\n", cpu.esi);
+			printf("edi=%d\n", cpu.edi);
 		} else if (type == 'b') {
 			printf("Sorry, this function is developing!\n")
 		}
