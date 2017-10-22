@@ -2,6 +2,7 @@
 #include "monitor/expr.h"
 #include "monitor/watchpoint.h"
 #include "nemu.h"
+#include "reg.h"
 
 #include <stdlib.h>
 #include <readline/readline.h>
@@ -40,6 +41,8 @@ static int cmd_help(char *args);
 
 static int cmd_si(char *args);
 
+static int cmd_info(char *args);
+
 static struct {
 	char *name;
 	char *description;
@@ -49,6 +52,7 @@ static struct {
 	{ "c", "Continue the execution of the program", cmd_c },
 	{ "q", "Exit NEMU", cmd_q },
 	{ "si", "Step over n times and pause. If n is not given, n = 1", cmd_si},
+	{ "info", "Info [r] print the values of all of the registers; Info [n] print the imformation of watchpoint", cmd_info},
 	/* TODO: Add more commands */
 
 };
@@ -79,12 +83,12 @@ static int cmd_help(char *args) {
 }
 
 static int cmd_si(char *args) {
-	int step_num;
+	unsigned step_num;
 	if (args == NULL) {
 		cpu_exec(1);
 		return 0;
 	} else {
-		if (sscanf(args, "%d", &step_num) > 0) {
+		if (sscanf(args, "%u", &step_num) > 0) {
 			cpu_exec(step_num);
 		} else {
 			printf("Error, si must be followed by a number\n");
@@ -92,6 +96,31 @@ static int cmd_si(char *args) {
 	}
 	return 0;
 }	
+
+static int cmd_info(char *args) {
+	char type;
+	if (args == NULL) {
+		printf("Error, [info] must be followed by [b] or [r]!\n");
+		return 0;
+	}
+	if (sscanf(args, "%c", &type) > 0) {
+		if (type == 'r') {
+			printf("eax=%d\n", CPU_state.eax);
+			printf("ecx=%d\n", CPU_state.ecx);
+			printf("edx=%d\n", CPU_state.edx);
+			printf("ebx=%d\n", CPU_state.ebx);
+			printf("esp=%d\n", CPU_state.esp);
+			printf("ebp=%d\n", CPU_state.ebp);
+			printf("esi=%d\n", CPU_state.esi);
+			printf("edi=%d\n", CPU_state.edi);
+		} else if (type == 'b') {
+			printf("Sorry, this function is developing!\n")
+		}
+	} else {
+		printf("Error, [info] must be followed by [b] or [r]!\n");
+	}
+	return 0;
+}
 
 void ui_mainloop() {
 	while(1) {
