@@ -8,6 +8,23 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 
+static void print_b(unsigned char a) //不懂有什么作用
+{
+	const static char hex_map[][2] = {
+		"0", "1", "2", "3", "4", "5", "6", "7", 
+		"8", "9", "a", "b", "c", "d", "e", "f",
+	};
+	printf("%s%s", hex_map[a>>4], hex_map[a&0xf]);
+}
+
+static void print_l(unsigned a)
+{
+	print_b((a>>24) & 0xff);
+	print_b((a>>16) & 0xff);
+	print_b((a>>8) & 0xff);
+	print_b(a & 0xff);
+}
+
 void cpu_exec(uint32_t);
 
 /* We use the ``readline'' library to provide more flexibility to read from stdin. */
@@ -153,9 +170,10 @@ static int cmd_x(char *args)
 			unsigned i;
 			for (i = 0; i < num; i++) {
 				printf("%x:      ", begin);
-				unsigned int ret = swaddr_read(begin, 4); //这个函数又是什么意思？！
-				print_l(ret);//大概是讲内存地址读成数据，再打印成16进制？
+				unsigned ret = swaddr_read(begin, 4); 
+				print_l(ret);//将内存地址读成数据，再打印成16进制？
 				begin += 4;
+				printf(" \n");
 			}
 			return 0;
 		}
