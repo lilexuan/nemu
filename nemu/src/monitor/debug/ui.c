@@ -43,6 +43,8 @@ static int cmd_si(char *args);
 
 static int cmd_info(char *args);
 
+static int cmd_x(char *args);
+
 static struct {
 	char *name;
 	char *description;
@@ -53,6 +55,7 @@ static struct {
 	{ "q", "Exit NEMU", cmd_q },
 	{ "si", "Step over n times and pause. If n is not given, n = 1", cmd_si},
 	{ "info", "Info [r] print the values of all of the registers; Info [n] print the imformation of watchpoint", cmd_info},
+	{ "x", "get the value of expr, use the result as the begin adress of memory, output the successly n 4 bytes in the form of 0x", cmd_x},
 	/* TODO: Add more commands */
 
 };
@@ -134,6 +137,31 @@ static int cmd_info(char *args) {
 		printf("Error, [info] must be followed by [b] or [r]!\n");
 	}
 	return 0;
+}
+
+static int cmd_x(char *args)
+{
+	if (args == NULL) {
+		printf("sorry, please input as the form x [number] [expression]\n");
+		return 1;
+	}
+	unsigned num, start;
+	char str[3];
+	if (sscanf(args, "%u%2s%x", &num, str, &start) == 3) {
+		if (strcmp(str, "0x") == 0 || strcmp(str, "0X") == 0) {
+			swaddr_t begin = start; //这个类型到底什么鬼意思啊！！！
+			unsigned i;
+			for (i = 0; i < num; i++) {
+				printf("%x:      ", begin);
+				unsigned int ret = swaddr_read(begin, 4); //这个函数又是什么意思？！
+				print_l(ret);//大概是讲内存地址读成数据，再打印成16进制？
+				begin += 4;
+			}
+			return 0;
+		}
+	}
+	printf("sorry, please input as the form x [number] [expression]\n");
+	return 1;
 }
 
 void ui_mainloop() {
