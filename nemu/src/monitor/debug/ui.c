@@ -62,6 +62,8 @@ static int cmd_info(char *args);
 
 static int cmd_x(char *args);
 
+static int cmd_p(char *args);
+
 static struct {
 	char *name;
 	char *description;
@@ -73,6 +75,7 @@ static struct {
 	{ "si", "Step over n times and pause. If n is not given, n = 1", cmd_si},
 	{ "info", "Info [r] print the values of all of the registers; Info [n] print the imformation of watchpoint", cmd_info},
 	{ "x", "get the value of expr, use the result as the begin adress of memory, output the successly n 4 bytes in the form of 0x", cmd_x},
+	{ "p", "get the value of the expression", cmd_p},
 	/* TODO: Add more commands */
 
 };
@@ -180,6 +183,16 @@ static int cmd_x(char *args)
 	}
 	printf("sorry, please input as the form x [number] [expression]\n");
 	return 1;
+}
+
+static int cmd_p(char *arg) 
+{
+	if (arg == NULL) {
+		printf("Error, a expression must be followed!\n");
+		return 1;
+	}
+	bool success = false;
+	int var = expr(arg, &success);
 }
 
 void ui_mainloop() {
